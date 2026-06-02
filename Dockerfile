@@ -1,11 +1,16 @@
-FROM python:3.15.0b1-alpine3.23
+FROM python:3.13-alpine3.23
 LABEL maintainer="www.chandrahasballeda.com"
 
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN apk add --no-cache build-base libffi-dev
+RUN apk add --no-cache \
+    build-base \
+    libffi-dev \
+    postgresql-dev \
+    postgresql-client \
+    musl-dev
 
 COPY ./requirements.txt .
 COPY ./requirements.dev.txt .

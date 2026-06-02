@@ -10,6 +10,23 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
+    environment:
+      - POSTGRES_DB_HOST=mydb
+    env_file:
+      - ./env/.env.dev
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "python manage.py wait_for_db && 
+             python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - mydb
+
+  mydb:
+    image: postgres:18.4-alpine3.23
+    volumes:
+      - mydbvolume:/var/lib/postgresql
+    env_file:
+      - ./env/.env.dev
+
+volumes:
+  mydbvolume:
