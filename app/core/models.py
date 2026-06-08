@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
     BaseUserManager,
 )
+from django.conf import settings
 
 
 # Since we are using AbstractBaseUser, it requires us to define the UserManager as below.
@@ -65,3 +66,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     objects = UserManager()
+
+
+class Recipe(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.URLField(max_length=255, blank=True, null=True)
+    tags = models.ManyToManyField("Tag")
+
+    def __str__(self):
+        return self.title
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

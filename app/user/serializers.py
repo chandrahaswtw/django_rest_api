@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext as _
 from rest_framework import serializers
+from core.models import Recipe
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return get_user_model().objects.create_user(**validated_data)
 
-    # We are overriding the update function.
+    # We are overriding the update function. Automatically called during updates.
     def update(self, instance, validated_data):
         password = validated_data.pop("password", None)
         user = super().update(instance, validated_data)
@@ -29,8 +30,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.Serializer):
+
     email = serializers.EmailField()
-    # style={"input_password": "password"} --> Only form Swagger to make password invisible.
+
+    # style={"input_password": "password"} --> Only for Swagger to make password invisible.
     # trim_whitespace=True --> By default, trim_whitespace is False, we are overriding it.
     password = serializers.CharField(
         style={"input_password": "password"}, trim_whitespace=True

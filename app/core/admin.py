@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, Recipe, Tag
 
 
 # For users specifically, we use UserAdmin. We imported admin.ModelAdmin for other models if we remember.
@@ -38,3 +38,5 @@ class UserAdmin(UserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Recipe)
+admin.site.register(Tag)

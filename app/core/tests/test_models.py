@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core.models import Recipe, Tag
 
 
 class ModelTests(TestCase):
@@ -41,3 +42,46 @@ class ModelTests(TestCase):
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
+
+
+class RecipeModelTests(TestCase):
+
+    user_payload = {
+        "email": "test@example.com",
+        "password": "Admin@789",
+        "name": "Chandrahas Balleda",
+    }
+
+    def create_user(self):
+        """
+        Create new user function
+        """
+        return get_user_model().objects.create_user(**self.user_payload)
+
+    def test_recipe_record_creation(self):
+        user = self.create_user()
+
+        recipe_payload = {
+            "user": user,
+            "title": "test_title",
+            "description": "test_description",
+            "time_minutes": 100,
+            "price": 23.33,
+            "link": "https://en.wikipedia.org/wiki/Breaking_the_Habit_(song)",
+        }
+
+        recipe = Recipe.objects.create(**recipe_payload)
+
+        self.assertEqual(recipe.title, recipe_payload["title"])
+
+
+class TagModelTests(TestCase):
+    def test_tag_model(self):
+        user_payload = {
+            "email": "test@example.com",
+            "password": "Admin@789",
+            "name": "Chandrahas Balleda",
+        }
+        user = get_user_model().objects.create_user(**user_payload)
+        tag = Tag.objects.create(name="testTag", user=user)
+        self.assertEqual(tag.name, "testTag")

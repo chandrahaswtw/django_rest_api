@@ -7,6 +7,7 @@ class CreateUserApiView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
+# Once the user is authenticated,  the user’s data is available on request.user
 class GetTokenApiView(ObtainAuthToken):
     serializer_class = TokenSerializer
 
@@ -27,7 +28,12 @@ class ManageUserAPIView(generics.RetrieveUpdateAPIView):
     # Only authenticated users are allowed.
     permission_classes = [permissions.IsAuthenticated]
 
-    # This is used for get requests.
+    # This is used for get requests. The steps are as below:
+    # get_object() is called.
+    # It returns the authenticated User instance.
+    # That User object is passed to UserSerializer.
+    # The serializer converts the model object into JSON-friendly data.
+    # DRF returns the response.
     def get_object(self):
         # Once user is authentcated, it's available on the request.
         return self.request.user
