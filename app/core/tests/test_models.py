@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, recipe_image_file_Path
+from unittest.mock import patch
 
 
 class ModelTests(TestCase):
@@ -85,3 +86,16 @@ class TagModelTests(TestCase):
         user = get_user_model().objects.create_user(**user_payload)
         tag = Tag.objects.create(name="testTag", user=user)
         self.assertEqual(tag.name, "testTag")
+
+
+class RecipeModelImageTests(TestCase):
+
+    @patch("core.models.uuid.uuid4")
+    def test_recipe_image_file_Path(self, mock_uuid):
+
+        #  Mocked uuid.uuid4() will now return "test_uuid"
+        test_uuid = "test_uuid"
+        mock_uuid.return_value = test_uuid
+
+        filename = recipe_image_file_Path(None, "something.png")
+        self.assertEqual(filename, f"uploads/{test_uuid}.png")

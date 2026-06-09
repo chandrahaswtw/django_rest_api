@@ -6,6 +6,15 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.conf import settings
+import os
+import uuid
+
+
+# All this will do is to modify the filename to an UUID.ext
+def recipe_image_file_Path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    new_filename = f"{uuid.uuid4()}{ext}"
+    return os.path.join("uploads", new_filename)
 
 
 # Since we are using AbstractBaseUser, it requires us to define the UserManager as below.
@@ -76,6 +85,7 @@ class Recipe(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     link = models.URLField(max_length=255, blank=True, null=True)
     tags = models.ManyToManyField("Tag")
+    image = models.ImageField(null=True, upload_to=recipe_image_file_Path)
 
     def __str__(self):
         return self.title

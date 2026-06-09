@@ -10,8 +10,12 @@ RUN apk add --no-cache \
     libffi-dev \
     postgresql-dev \
     postgresql-client \
-    musl-dev
+    musl-dev \
+    jpeg-dev \
+    zlib \
+    zlib-dev
 
+ 
 COPY ./requirements.txt .
 COPY ./requirements.dev.txt .
 
@@ -24,6 +28,11 @@ RUN python -m pip install --upgrade pip && \
     fi
 
 RUN adduser --disabled-password --no-create-home django-user
+
+RUN mkdir -p /vol/web/media && \ 
+    mkdir -p /vol/web/static && \
+    chown -R django-user:django-user /vol && \
+    chmod -R 755 /vol 
 
 USER django-user
 
