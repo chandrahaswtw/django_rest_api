@@ -25,6 +25,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "link",
             "description",
             "tags",
+            "image",
         ]
 
         # This field can be returned in API responses, but clients are not allowed to provide or modify it. Opposite of write_only
