@@ -18,6 +18,7 @@ RUN apk add --no-cache \
  
 COPY ./requirements.txt .
 COPY ./requirements.dev.txt .
+COPY ./scripts /scripts
 
 ARG DEV=false
 
@@ -32,10 +33,15 @@ RUN adduser --disabled-password --no-create-home django-user
 RUN mkdir -p /vol/web/media && \ 
     mkdir -p /vol/web/static && \
     chown -R django-user:django-user /vol && \
-    chmod -R 755 /vol 
+    chmod -R 755 /vol && \
+    chmod +x -R /scripts
+
+ENV PATH="/scripts:$PATH"
 
 USER django-user
 
 COPY ./app /app
 
 EXPOSE 8000
+
+CMD ["run.sh"]

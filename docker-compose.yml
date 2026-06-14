@@ -10,8 +10,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-      - dev-static-data:/vol/web/static
-      - dev-media-data:/vol/web/media
+      - dev-static-data:/vol/web/
     environment:
       - POSTGRES_DB_HOST=mydb
     env_file:
@@ -33,4 +32,3 @@ services:
 volumes:
   mydbvolume:
   dev-static-data:
-  dev-media-data:
